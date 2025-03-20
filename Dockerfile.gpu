@@ -1,0 +1,36 @@
+# Use the official Ubuntu base image
+FROM nvidia/cuda:12.2.0-devel-ubuntu22.04
+
+# 设置环境变量
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG=C.UTF-8
+
+# 更新软件源并安装所需软件包
+RUN sed -i 's|http://archive.ubuntu.com/ubuntu/|https://mirrors.tuna.tsinghua.edu.cn/ubuntu/|g' /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get install -y \
+    python3.10 \
+    python3-pip \
+    wget \
+    curl \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    libgl1 \
+    libjpeg-dev \
+    libpango1.0-0 \
+    && apt-get clean
+
+# 设置 Python 3.10 为默认 Python 版本
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
+
+# 升级 pip
+RUN python3 -m pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# install magic-pdf
+RUN pip install -U magic-pdf[full] --extra-index-url https://wheels.myhloli.com -i https://pypi.tuna.tsinghua.edu.cn/simple && rm -rf /root/.cache/pip
+
+# install paddle ocr
+RUN pip install paddlepaddle-gpu==3.0.0b1 -i https://www.paddlepaddle.org.cn/packages/stable/cu118/ && rm -rf /root/.cache/pip
+
+CMD ["/bin/bash"]
