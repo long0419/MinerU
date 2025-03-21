@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
 RUN pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # 安装 magic-pdf
-RUN pip install -U magic-pdf[full] --extra-index-url https://wheels.myhloli.com -i https://pypi.tuna.tsinghua.edu.cn/simple && rm -rf /root/.cache/pip
+RUN pip install -U magic-pdf[full] --extra-index-url https://wheels.myhloli.com -i https://mirrors.aliyun.com/pypi/simple && \
+    rm -rf /root/.cache/pip
 
 CMD ["/bin/bash"]
